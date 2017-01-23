@@ -60,8 +60,13 @@ class App extends React.Component{
     }
     renderContainer(){
 	return(
-	    <Container photos={this.state.photos} />
+	    <Container photos={this.state.photos}/>
 	);
+    }
+
+    showMessage() {
+            alert('hola');
+
     }
     render(){
 	// no loading sign if its all loaded

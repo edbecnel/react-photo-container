@@ -99,9 +99,9 @@ class Container extends React.Component{
                 }
 		var src = this.props.photos[k].src;
 
-		if (this.props.disableLightbox){
+		if (this.props.handlePhotoClick){
 		    photoPreviewNodes.push(
-			 <div key={k} style={style}>
+			 <div key={k} style={style} onClick={this.props.handlePhotoClick.bind(this, k)}>
 			    <img src={src} style={{display:'block', border:0}} height={commonHeight} width={commonHeight * this.props.photos[k].aspectRatio} alt="" />
 			 </div>
 		    );
@@ -121,7 +121,7 @@ class Container extends React.Component{
         );
     }
     renderContainer(photoPreviewNodes, lightboxImages){
-	if (this.props.disableLightbox){
+	if (this.props.handlePhotoClick){
 	    return(
 		<div id="Container" className="clearfix" ref={(c) => this._container = c}>
 		    {photoPreviewNodes}
@@ -152,21 +152,16 @@ class Container extends React.Component{
 Container.displayName = 'Container';
 Container.propTypes = {
     photos: function(props, propName, componentName){
-	var lightboxImageValidator = React.PropTypes.object;
-	if (!props.disableLightbox){
-	    lightboxImageValidator = React.PropTypes.object.isRequired;
-	}
 	return React.PropTypes.arrayOf(
 	    React.PropTypes.shape({
 		src: React.PropTypes.string.isRequired,
 		width: React.PropTypes.number.isRequired,
 		height: React.PropTypes.number.isRequired,
-		aspectRatio: React.PropTypes.number.isRequired,
-		lightboxImage: lightboxImageValidator
+		aspectRatio: React.PropTypes.number.isRequired
 	    })
 	).isRequired.apply(this,arguments);
     },
-    disableLightbox: React.PropTypes.bool,
+    handlePhotoClick: React.PropTypes.func,
 	custom: React.PropTypes.shape({
 		mobile: React.PropTypes.number.isRequired,
 		desktop: React.PropTypes.number.isRequired
@@ -175,7 +170,6 @@ Container.propTypes = {
 Container.defaultProps = {
     lightboxShowImageCount: false,
     backdropClosesModal: true,
-    disableLightbox: false,
 	custom: {mobile:2, desktop:3},
     preloadNextImage: true
 }
