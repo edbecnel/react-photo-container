@@ -233,7 +233,7 @@ Container.propTypes = {
 Container.defaultProps = {
 				lightboxShowImageCount: false,
 				backdropClosesModal: true,
-				custom: { mobile: 2, desktop: 4 },
+				custom: { mobile: 2, desktop: 3 },
 				preloadNextImage: true
 };
 // Container image style

@@ -105,11 +105,6 @@ var App = (function (_React$Component) {
             return _react2['default'].createElement(_reactPhotoContainer2['default'], { photos: this.state.photos });
         }
     }, {
-        key: 'showMessage',
-        value: function showMessage() {
-            alert('hola');
-        }
-    }, {
         key: 'render',
         value: function render() {
             // no loading sign if its all loaded
