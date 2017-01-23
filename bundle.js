@@ -48,14 +48,14 @@ var Container = (function (_React$Component) {
 				_createClass(Container, [{
 								key: 'componentDidMount',
 								value: function componentDidMount() {
-												this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+												this.setState({ containerWidth: Math.floor(this._container.clientWidth) });
 												window.addEventListener('resize', this.handleResize);
 								}
 				}, {
 								key: 'componentDidUpdate',
 								value: function componentDidUpdate() {
-												if (this._gallery.clientWidth !== this.state.containerWidth) {
-																this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+												if (this._container.clientWidth !== this.state.containerWidth) {
+																this.setState({ containerWidth: Math.floor(this._container.clientWidth) });
 												}
 								}
 				}, {
@@ -66,7 +66,7 @@ var Container = (function (_React$Component) {
 				}, {
 								key: 'handleResize',
 								value: function handleResize(e) {
-												this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+												this.setState({ containerWidth: Math.floor(this._container.clientWidth) });
 								}
 				}, {
 								key: 'openLightbox',
@@ -170,26 +170,26 @@ var Container = (function (_React$Component) {
 																				}
 																}
 												}
-												return this.renderGallery(photoPreviewNodes, lightboxImages);
+												return this.renderContainer(photoPreviewNodes, lightboxImages);
 								}
 				}, {
-								key: 'renderGallery',
-								value: function renderGallery(photoPreviewNodes, lightboxImages) {
+								key: 'renderContainer',
+								value: function renderContainer(photoPreviewNodes, lightboxImages) {
 												var _this = this;
 
 												if (this.props.disableLightbox) {
 																return _react2['default'].createElement(
 																				'div',
-																				{ id: 'Gallery', className: 'clearfix', ref: function (c) {
-																												return _this._gallery = c;
+																				{ id: 'Container', className: 'clearfix', ref: function (c) {
+																												return _this._container = c;
 																								} },
 																				photoPreviewNodes
 																);
 												} else {
 																return _react2['default'].createElement(
 																				'div',
-																				{ id: 'Gallery', className: 'clearfix', ref: function (c) {
-																												return _this._gallery = c;
+																				{ id: 'Container', className: 'clearfix', ref: function (c) {
+																												return _this._container = c;
 																								} },
 																				photoPreviewNodes,
 																				_react2['default'].createElement(_reactImages2['default'], {
@@ -213,8 +213,8 @@ var Container = (function (_React$Component) {
 })(_react2['default'].Component);
 
 ;
-Gallery.displayName = 'Gallery';
-Gallery.propTypes = {
+Container.displayName = 'Container';
+Container.propTypes = {
 				photos: function photos(props, propName, componentName) {
 								var lightboxImageValidator = _react2['default'].PropTypes.object;
 								if (!props.disableLightbox) {
@@ -234,14 +234,14 @@ Gallery.propTypes = {
 								desktop: _react2['default'].PropTypes.number.isRequired
 				})
 };
-Gallery.defaultProps = {
+Container.defaultProps = {
 				lightboxShowImageCount: false,
 				backdropClosesModal: true,
 				disableLightbox: false,
 				custom: { mobile: 1, desktop: 1 },
 				preloadNextImage: true
 };
-// Gallery image style
+// Container image style
 var style = {
 				display: 'block',
 				margin: 2,
