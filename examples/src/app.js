@@ -63,11 +63,6 @@ class App extends React.Component{
 	    <Container photos={this.state.photos}/>
 	);
     }
-
-    showMessage() {
-            alert('hola');
-
-    }
     render(){
 	// no loading sign if its all loaded
         if (this.state.photos && this.state.loadedAll){
