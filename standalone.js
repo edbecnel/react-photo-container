@@ -49,14 +49,14 @@ var Container = (function (_React$Component) {
 				_createClass(Container, [{
 								key: 'componentDidMount',
 								value: function componentDidMount() {
-												this.setState({ containerWidth: Math.floor(_reactDom2['default'].findDOMNode(this).clientWidth) });
+												this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
 												window.addEventListener('resize', this.handleResize);
 								}
 				}, {
 								key: 'componentDidUpdate',
 								value: function componentDidUpdate() {
-												if (_reactDom2['default'].findDOMNode(this).clientWidth !== this.state.containerWidth) {
-																this.setState({ containerWidth: Math.floor(_reactDom2['default'].findDOMNode(this).clientWidth) });
+												if (this._gallery.clientWidth !== this.state.containerWidth) {
+																this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
 												}
 								}
 				}, {
@@ -67,7 +67,7 @@ var Container = (function (_React$Component) {
 				}, {
 								key: 'handleResize',
 								value: function handleResize(e) {
-												this.setState({ containerWidth: Math.floor(_reactDom2['default'].findDOMNode(this).clientWidth) });
+												this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
 								}
 				}, {
 								key: 'openLightbox',
@@ -101,23 +101,35 @@ var Container = (function (_React$Component) {
 												});
 								}
 				}, {
-								key: 'render',
-								value: function render() {
-												var rowLimit = 1,
-												    photoPreviewNodes = [];
+								key: 'getRowLimit',
+								value: function getRowLimit() {
+												var rowLimit = 1;
 												if (this.state.containerWidth >= 480) {
-																rowLimit = 2;
+																rowLimit = this.props.custom.mobile ? this.props.custom.mobile : 2;
 												}
 												if (this.state.containerWidth >= 1024) {
-																rowLimit = 3;
+																rowLimit = this.props.custom.desktop ? this.props.custom.desktop : 3;
 												}
+												return rowLimit;
+								}
+				}, {
+								key: 'render',
+								value: function render() {
+												var rowLimit = this.getRowLimit();
+												var photoPreviewNodes = [];
 												var contWidth = this.state.containerWidth - rowLimit * 4; /* 4px for margin around each image*/
 												contWidth = Math.floor(contWidth - 2); // add some padding to prevent layout prob
+												var remainder = this.props.photos.length % rowLimit;
+												if (remainder) {
+																// there are fewer than rowLimit photos in last row
+																var lastRowWidth = Math.floor(this.state.containerWidth - remainder * 4 - 2);
+																var lastRowIndex = this.props.photos.length - remainder;
+												}
 												var lightboxImages = [];
 												for (var i = 0; i < this.props.photos.length; i += rowLimit) {
 																var rowItems = [];
-																// loop through each set of rowLimit num
-																// eg. if rowLimit is 3 it will  loop through 0,1,2, then 3,4,5 to perform calculations for the particular set
+																// loop thru each set of rowLimit num
+																// eg. if rowLimit is 3 it will  loop thru 0,1,2, then 3,4,5 to perform calculations for the particular set
 																var aspectRatio = 0,
 																    totalAr = 0,
 																    commonHeight = 0;
@@ -127,8 +139,12 @@ var Container = (function (_React$Component) {
 																				}
 																				totalAr += this.props.photos[j].aspectRatio;
 																}
-																commonHeight = contWidth / totalAr;
-																// run through the same set of items again to give the common height
+																if (i === lastRowIndex) {
+																				commonHeight = lastRowWidth / totalAr;
+																} else {
+																				commonHeight = contWidth / totalAr;
+																}
+																// run thru the same set of items again to give the common height
 																for (var k = i; k < i + rowLimit; k++) {
 																				if (k == this.props.photos.length) {
 																								break;
@@ -155,21 +171,27 @@ var Container = (function (_React$Component) {
 																				}
 																}
 												}
-												return this.renderContainer(photoPreviewNodes, lightboxImages);
+												return this.renderGallery(photoPreviewNodes, lightboxImages);
 								}
 				}, {
-								key: 'renderContainer',
-								value: function renderContainer(photoPreviewNodes, lightboxImages) {
+								key: 'renderGallery',
+								value: function renderGallery(photoPreviewNodes, lightboxImages) {
+												var _this = this;
+
 												if (this.props.disableLightbox) {
 																return _react2['default'].createElement(
 																				'div',
-																				{ id: 'Container', className: 'clearfix' },
+																				{ id: 'Gallery', className: 'clearfix', ref: function (c) {
+																												return _this._gallery = c;
+																								} },
 																				photoPreviewNodes
 																);
 												} else {
 																return _react2['default'].createElement(
 																				'div',
-																				{ id: 'Container', className: 'clearfix' },
+																				{ id: 'Gallery', className: 'clearfix', ref: function (c) {
+																												return _this._gallery = c;
+																								} },
 																				photoPreviewNodes,
 																				_react2['default'].createElement(_reactImages2['default'], {
 																								currentImage: this.state.currentImage,
@@ -180,7 +202,8 @@ var Container = (function (_React$Component) {
 																								onClickNext: this.gotoNext,
 																								width: 1600,
 																								showImageCount: this.props.lightboxShowImageCount,
-																								backdropClosesModal: this.props.backdropClosesModal
+																								backdropClosesModal: this.props.backdropClosesModal,
+																								preloadNextImage: this.props.preloadNextImage
 																				})
 																);
 												}
@@ -191,8 +214,8 @@ var Container = (function (_React$Component) {
 })(_react2['default'].Component);
 
 ;
-Container.displayName = 'Container';
-Container.propTypes = {
+Gallery.displayName = 'Gallery';
+Gallery.propTypes = {
 				photos: function photos(props, propName, componentName) {
 								var lightboxImageValidator = _react2['default'].PropTypes.object;
 								if (!props.disableLightbox) {
@@ -206,14 +229,20 @@ Container.propTypes = {
 												lightboxImage: lightboxImageValidator
 								})).isRequired.apply(this, arguments);
 				},
-				disableLightbox: _react2['default'].PropTypes.bool
+				disableLightbox: _react2['default'].PropTypes.bool,
+				custom: _react2['default'].PropTypes.shape({
+								mobile: _react2['default'].PropTypes.number.isRequired,
+								desktop: _react2['default'].PropTypes.number.isRequired
+				})
 };
-Container.defaultProps = {
+Gallery.defaultProps = {
 				lightboxShowImageCount: false,
 				backdropClosesModal: true,
-				disableLightbox: false
+				disableLightbox: false,
+				custom: { mobile: 1, desktop: 1 },
+				preloadNextImage: true
 };
-// Container image style
+// Gallery image style
 var style = {
 				display: 'block',
 				margin: 2,
