@@ -42,7 +42,7 @@ var App = (function (_React$Component) {
         _classCallCheck(this, App);
 
         _get(Object.getPrototypeOf(App.prototype), 'constructor', this).call(this);
-        this.state = { photos: null, pageNum: 1, totalPages: 1, loadedAll: false, custom: { mobile: 4 } };
+        this.state = { photos: null, pageNum: 1, totalPages: 1, loadedAll: false };
 
         this.handleScroll = this.handleScroll.bind(this);
         this.loadMorePhotos = this.loadMorePhotos.bind(this);
@@ -103,6 +103,11 @@ var App = (function (_React$Component) {
         key: 'renderContainer',
         value: function renderContainer() {
             return _react2['default'].createElement(_reactPhotoContainer2['default'], { photos: this.state.photos });
+        }
+    }, {
+        key: 'showMessage',
+        value: function showMessage() {
+            alert('hola');
         }
     }, {
         key: 'render',

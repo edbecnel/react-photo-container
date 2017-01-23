@@ -105,10 +105,10 @@ var Container = (function (_React$Component) {
 								value: function getRowLimit() {
 												var rowLimit = 1;
 												if (this.state.containerWidth >= 480) {
-																rowLimit = this.props.custom.mobile ? this.props.custom.mobile : 2;
+																rowLimit = this.props.custom.mobile;
 												}
 												if (this.state.containerWidth >= 1024) {
-																rowLimit = this.props.custom.desktop ? this.props.custom.desktop : 3;
+																rowLimit = this.props.custom.desktop;
 												}
 												return rowLimit;
 								}
@@ -151,10 +151,10 @@ var Container = (function (_React$Component) {
 																				}
 																				var src = this.props.photos[k].src;
 
-																				if (this.props.disableLightbox) {
+																				if (this.props.handlePhotoClick) {
 																								photoPreviewNodes.push(_react2['default'].createElement(
 																												'div',
-																												{ key: k, style: style },
+																												{ key: k, style: style, onClick: this.props.handlePhotoClick.bind(this, k) },
 																												_react2['default'].createElement('img', { src: src, style: { display: 'block', border: 0 }, height: commonHeight, width: commonHeight * this.props.photos[k].aspectRatio, alt: '' })
 																								));
 																				} else {
@@ -178,7 +178,7 @@ var Container = (function (_React$Component) {
 								value: function renderContainer(photoPreviewNodes, lightboxImages) {
 												var _this = this;
 
-												if (this.props.disableLightbox) {
+												if (this.props.handlePhotoClick) {
 																return _react2['default'].createElement(
 																				'div',
 																				{ id: 'Container', className: 'clearfix', ref: function (c) {
@@ -217,19 +217,14 @@ var Container = (function (_React$Component) {
 Container.displayName = 'Container';
 Container.propTypes = {
 				photos: function photos(props, propName, componentName) {
-								var lightboxImageValidator = _react2['default'].PropTypes.object;
-								if (!props.disableLightbox) {
-												lightboxImageValidator = _react2['default'].PropTypes.object.isRequired;
-								}
 								return _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.shape({
 												src: _react2['default'].PropTypes.string.isRequired,
 												width: _react2['default'].PropTypes.number.isRequired,
 												height: _react2['default'].PropTypes.number.isRequired,
-												aspectRatio: _react2['default'].PropTypes.number.isRequired,
-												lightboxImage: lightboxImageValidator
+												aspectRatio: _react2['default'].PropTypes.number.isRequired
 								})).isRequired.apply(this, arguments);
 				},
-				disableLightbox: _react2['default'].PropTypes.bool,
+				handlePhotoClick: _react2['default'].PropTypes.func,
 				custom: _react2['default'].PropTypes.shape({
 								mobile: _react2['default'].PropTypes.number.isRequired,
 								desktop: _react2['default'].PropTypes.number.isRequired
@@ -238,8 +233,7 @@ Container.propTypes = {
 Container.defaultProps = {
 				lightboxShowImageCount: false,
 				backdropClosesModal: true,
-				disableLightbox: false,
-				custom: { mobile: 1, desktop: 1 },
+				custom: { mobile: 2, desktop: 3 },
 				preloadNextImage: true
 };
 // Container image style
