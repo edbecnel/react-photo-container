@@ -42,7 +42,7 @@ var App = (function (_React$Component) {
         _classCallCheck(this, App);
 
         _get(Object.getPrototypeOf(App.prototype), 'constructor', this).call(this);
-        this.state = { photos: null, pageNum: 1, totalPages: 1, loadedAll: false, custom: { mobile: 4, desktop: 8 } };
+        this.state = { photos: null, pageNum: 1, totalPages: 1, loadedAll: false, custom: { mobile: 4 } };
 
         this.handleScroll = this.handleScroll.bind(this);
         this.loadMorePhotos = this.loadMorePhotos.bind(this);
