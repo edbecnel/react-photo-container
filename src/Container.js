@@ -16,19 +16,19 @@ class Container extends React.Component{
 	this.openLightbox = this.openLightbox.bind(this);
     }
     componentDidMount(){
-	this.setState({containerWidth: Math.floor(ReactDOM.findDOMNode(this).clientWidth)})
+	this.setState({containerWidth: Math.floor(this._container.clientWidth)})
         window.addEventListener('resize', this.handleResize);
     }
     componentDidUpdate(){
-	if (ReactDOM.findDOMNode(this).clientWidth !== this.state.containerWidth){
-	    this.setState({containerWidth: Math.floor(ReactDOM.findDOMNode(this).clientWidth)});
+	if (this._container.clientWidth !== this.state.containerWidth){
+	    this.setState({containerWidth: Math.floor(this._container.clientWidth)});
 	}
     }
     componentWillUnmount(){
 	 window.removeEventListener('resize', this.handleResize, false);
     }
     handleResize(e){
-        this.setState({containerWidth: Math.floor(ReactDOM.findDOMNode(this).clientWidth)});
+        this.setState({containerWidth: Math.floor(this._container.clientWidth)});
     }
     openLightbox(index, event){
         event.preventDefault();
@@ -53,22 +53,31 @@ class Container extends React.Component{
 	    currentImage: this.state.currentImage + 1,
 	});
     }
+	getRowLimit(){
+		var rowLimit = 1;
+		if(this.state.containerWidth >= 480){
+			rowLimit = this.props.custom.mobile;
+		}
+		if (this.state.containerWidth >= 1024){
+			rowLimit = this.props.custom.desktop;
+		}
+		return rowLimit;
+	}
     render(){
-        var rowLimit = 1,
-            photoPreviewNodes = [];
-        if (this.state.containerWidth >= 480){
-            rowLimit = 2;
-        }
-        if (this.state.containerWidth >= 1024){
-            rowLimit = 3;
-        }
+		var rowLimit = this.getRowLimit();
+		var  photoPreviewNodes = [];
         var contWidth = this.state.containerWidth - (rowLimit * 4); /* 4px for margin around each image*/
         contWidth = Math.floor(contWidth - 2); // add some padding to prevent layout prob
+        var remainder = this.props.photos.length % rowLimit;
+        if (remainder) { // there are fewer than rowLimit photos in last row
+          var lastRowWidth = Math.floor(this.state.containerWidth - (remainder * 4) - 2);
+          var lastRowIndex = this.props.photos.length - remainder;
+        }
 	var lightboxImages = [];
         for (var i=0;i<this.props.photos.length;i+=rowLimit){
             var rowItems = [];
-            // loop through each set of rowLimit num
-            // eg. if rowLimit is 3 it will  loop through 0,1,2, then 3,4,5 to perform calculations for the particular set
+            // loop thru each set of rowLimit num
+            // eg. if rowLimit is 3 it will  loop thru 0,1,2, then 3,4,5 to perform calculations for the particular set
             var aspectRatio=0,
                 totalAr=0,
                 commonHeight = 0;
@@ -78,8 +87,12 @@ class Container extends React.Component{
                 }
 		totalAr += this.props.photos[j].aspectRatio;
             }
-            commonHeight = contWidth / totalAr;
-            // run through the same set of items again to give the common height
+            if (i === lastRowIndex) {
+              commonHeight = lastRowWidth / totalAr;
+            } else {
+              commonHeight = contWidth / totalAr;
+            }
+            // run thru the same set of items again to give the common height
             for (var k=i; k<i+rowLimit; k++){
                 if (k == this.props.photos.length){
                     break;
@@ -110,14 +123,14 @@ class Container extends React.Component{
     renderContainer(photoPreviewNodes, lightboxImages){
 	if (this.props.disableLightbox){
 	    return(
-		<div id="Container" className="clearfix">
+		<div id="Container" className="clearfix" ref={(c) => this._container = c}>
 		    {photoPreviewNodes}
 		</div>
 	    );
 	}
 	else{
 	    return(
-		<div id="Container" className="clearfix">
+		<div id="Container" className="clearfix" ref={(c) => this._container = c}>
 		    {photoPreviewNodes}
 		    <Lightbox
 			currentImage={this.state.currentImage}
@@ -129,6 +142,7 @@ class Container extends React.Component{
 			width={1600}
 			showImageCount={this.props.lightboxShowImageCount}
 			backdropClosesModal={this.props.backdropClosesModal}
+			preloadNextImage={this.props.preloadNextImage}
 		    />
 		</div>
 	    );
@@ -152,12 +166,18 @@ Container.propTypes = {
 	    })
 	).isRequired.apply(this,arguments);
     },
-    disableLightbox: React.PropTypes.bool
+    disableLightbox: React.PropTypes.bool,
+	custom: React.PropTypes.shape({
+		mobile: React.PropTypes.number.isRequired,
+		desktop: React.PropTypes.number.isRequired
+	})
 };
 Container.defaultProps = {
     lightboxShowImageCount: false,
     backdropClosesModal: true,
-    disableLightbox: false
+    disableLightbox: false,
+	custom: {mobile:2, desktop:3},
+    preloadNextImage: true
 }
 // Container image style
 const style = {
