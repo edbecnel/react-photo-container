@@ -69,7 +69,7 @@ Property        |       Type            |       Default         |       Descript
 :-----------------------|:--------------|:--------------|:--------------------------------
 photos | array  | undefined  | Required. Array of objects (photos)
 handlePhotoClick | func  | undefined  | Optional. Defines handler for photo click, if undefined Lightbox is displayed by default
-custom | object  | {mobile: 2, desktop: 3}  | Optional. Defines number of photos per line for different screen sizes
+custom | array  | empty array  | Optional. Defines number of photos per line (photoNb) for different screen sizes (width)
 lightboxShowImageCount | boolean | false | Optional.  Displays at the bottom of the photo index of total images. Eg. "5 of 20"
 backdropClosesModal | boolean | true | Optional. Clicking on backdrop closes the modal
 

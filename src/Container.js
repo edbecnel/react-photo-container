@@ -54,14 +54,20 @@ class Container extends React.Component{
 	});
     }
 	getRowLimit(){
-		var rowLimit = 1;
-		if(this.state.containerWidth >= 480){
-			rowLimit = this.props.custom.mobile;
-		}
-		if (this.state.containerWidth >= 1024){
-			rowLimit = this.props.custom.desktop;
+	    var rowLimit = 1;
+	    if(this.props.custom.length){
+	        this.props.custom.forEach((c) => rowLimit = this.state.containerWidth >= c.width ? c.photoNb : rowLimit);
+	    }
+	    else{
+	    	if(this.state.containerWidth >= 375){
+		    	rowLimit = 2;
+		    }
+		    if (this.state.containerWidth >= 1024){
+			    rowLimit = 3;
+		    }
 		}
 		return rowLimit;
+
 	}
     render(){
 		var rowLimit = this.getRowLimit();
@@ -162,16 +168,18 @@ Container.propTypes = {
 	).isRequired.apply(this,arguments);
     },
     handlePhotoClick: React.PropTypes.func,
-	custom: React.PropTypes.shape({
-		mobile: React.PropTypes.number.isRequired,
-		desktop: React.PropTypes.number.isRequired
-	})
+    custom: React.PropTypes.arrayOf(
+        React.PropTypes.shape({
+            width: React.PropTypes.number.isRequired,
+            photoNb: React.PropTypes.number.isRequired
+        })
+    )
 };
 Container.defaultProps = {
     lightboxShowImageCount: false,
     backdropClosesModal: true,
-	custom: {mobile:2, desktop:3},
-    preloadNextImage: true
+    preloadNextImage: true,
+    custom: []
 }
 // Container image style
 const style = {
