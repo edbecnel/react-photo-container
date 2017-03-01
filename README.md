@@ -91,5 +91,10 @@ src     |       string    |       undefined    |       Required. Image used for 
 srcset     |       array    |       undefined    |       Optional.  Array of srcsets for the lightbox
 caption     |       string    |       undefined    |       Optional.  Caption for the lightbox image
 
+## Credits
+
+This component is based on [React Photo Gallery](https://github.com/neptunian/react-photo-gallery/). I've taken it's sources and only added some additional props in order to make it more flexible.
+
+
 ## Lightbox
 This component uses [React Images](https://github.com/jossmac/react-images) for Lightbox functionality.  I've incorporated what I think to be useful Lightbox properties in context of a container into this component.
