@@ -1,6 +1,6 @@
 {
   "name": "react-photo-container",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A responsive React photo container component",
   "main": "lib/Container.js",
   "author": "Ane Diaz de Tuesta",
