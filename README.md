@@ -23,7 +23,7 @@ import Container from 'react-photo-container';
 export default class Sample extends React.Component {
     render() {
 	return (
-	    <Container photos={PHOTO_SET} />
+	    <Container photos={PHOTO_SET} custom={MY_CUSTOM}/>
 	);
     }
 }
@@ -61,6 +61,21 @@ const PHOTO_SET = [
   }
 ];
 
+const MY_CUSTOM = [
+  {
+    width: 480,
+    photoNb: 1
+  },
+  {
+    width: 768,
+    photoNb: 3
+  },
+  {
+    width: 1024,
+    photoNb: 6
+  }
+];
+
 ```
 
 ### Container properties
@@ -69,7 +84,7 @@ Property        |       Type            |       Default         |       Descript
 :-----------------------|:--------------|:--------------|:--------------------------------
 photos | array  | undefined  | Required. Array of objects (photos)
 handlePhotoClick | func  | undefined  | Optional. Defines handler for photo click, if undefined Lightbox is displayed by default
-custom | array  | empty array  | Optional. Defines number of photos per line (photoNb) for different screen sizes (width)
+custom | array of objects  | empty array  | Optional. Defines number of photos per line (photoNb) for different screen sizes (width). Objects in array must be sorted by width value (ascending)
 lightboxShowImageCount | boolean | false | Optional.  Displays at the bottom of the photo index of total images. Eg. "5 of 20"
 backdropClosesModal | boolean | true | Optional. Clicking on backdrop closes the modal
 
@@ -82,6 +97,14 @@ width | number  | undefined  | Required. Width of the container image
 height  | number  | undefined | Required. Height of the container image
 aspectRatio | number | undefined | Required. Aspect ratio of the container image (width / height)
 lightboxImage | object | undefined | Required by default.  If handlePhotoClick is undefined, Optional. See below for prop details.
+
+### Custom properties
+
+Property        |       Type            |       Default         |       Description
+:-----------------------|:--------------|:--------------|:--------------------------------
+width     |       number    |       undefined    |       Required. Screen width
+photoNb | number  | undefined  | Required. Number of photos per line
+
 
 ### lightboxImage prop properties
 
